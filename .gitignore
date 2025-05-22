@@ -1,0 +1,15 @@
+
+# Entorno virtual
+venv/
+
+# Variables de entorno
+*.env
+
+# Node modules
+node_modules/
+
+# Archivos de build
+build/
+dist/
+
+
