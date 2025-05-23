@@ -11,6 +11,10 @@
 
 <script setup lang="ts">
 import Card from '../components/general_components/Card.vue';
+import { useUserStore } from '../stores/userStore'
+
+const userStore = useUserStore();
+
     
 </script>
 

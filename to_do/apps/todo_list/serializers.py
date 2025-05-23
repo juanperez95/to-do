@@ -15,15 +15,3 @@ class TareasSerializer(serializers.ModelSerializer):
         model = Tareas
         fields = ['titulo','descripcion','estado','fecha_creacion','fecha_modificacion']
 
-# Usuarios
-class UsuarioSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['username','first_name','last_name','email']
-
-    def create(self, validated_data):
-        # Crear el usuario
-        usuario = User.objects.create_user(**validated_data)
-        usuario.set_password(validated_data['password']) # Hashear la contraseña
-        usuario.save()
-        return usuario

@@ -37,6 +37,7 @@ DEFAULT_APPS = [
 # Aplicaciones personales (modulos)
 MY_APPS = [
     'apps.todo_list',
+    'apps.usuarios',
 ]
 # Aplicaciones de librerias
 THIRDS_APPS = [

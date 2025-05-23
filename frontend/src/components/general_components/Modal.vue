@@ -37,14 +37,14 @@
                     </form>
 
                     <!-- Mostrar formualrio de login -->
-                    <form @submit.prevent method="post" v-if="is_login">
+                    <form @submit.prevent="inicioSesion" method="post" v-if="is_login">
                         <article class="mt-3">
-                            <label for="email">Usuario</label>
-                            <input type="email" class="form-control" id="email" placeholder="Email" required>
+                            <label for="username">Usuario</label>
+                            <input type="text" class="form-control" id="username" placeholder="Nombre de usuario" required v-model="dataSesion.username">
                         </article>
                         <article class="mt-3">
                             <label for="password">Contraseña</label>
-                            <input type="password" class="form-control" id="password" placeholder="Contraseña" required>
+                            <input type="password" class="form-control" id="password" placeholder="Contraseña" required v-model="dataSesion.password">
                         </article>
                         <!-- Boton de crear tarea -->
                         <div class="modal-footer">
@@ -63,18 +63,37 @@
 <script setup lang="ts">
 import Boton from './Boton.vue'
 import {defineProps} from 'vue'
+import { useUserStore } from '../../stores/userStore' // Api de la aplicacion
+import { Login, Usuario } from '../../interfaces/interfaces'
+import { reactive } from 'vue'
+import { useAlertStore } from '../../stores/alertStore'
 
-// Interface para definir los datos de la propiedad
-interface Login{
-    is_login?: Boolean,
-    // Manejar diferente IDS para los modales
-    id_modal:String
-}
+
+const alertas = useAlertStore();
+
 
 const props = defineProps<Login>();
 
+// Deinir la api
+const apiModal = useUserStore();
 
+// Datos para iniciar la sesion
+const dataSesion = reactive<Usuario>({
+    username: "",
+    password: "",
+});
 
+// Funcion para validar he iniciar sesion con el token
+const inicioSesion = async() => {
+    // Obtener el token en el store de la aplicacion
+    let response = await apiModal.apiUsuarios("http://localhost:8000/api/users/login", "POST", dataSesion);
+    if(response.status){
+        alertas.mostrarAlerta("Éxito", "Sesión iniciada con éxito", "success", "#0c64b7",true)
+        apiModal.access_token = response.access; // Guardar el token
+    }else{
+        alertas.mostrarAlerta("Error", "No se ha podido iniciar sesión", "warning", "#0c64b7",true)
+    }
+}
 </script>
 
 <style scoped>

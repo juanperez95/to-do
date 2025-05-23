@@ -1,27 +1,42 @@
 import { defineStore } from 'pinia'
 import axios from 'axios';
+import {ref} from 'vue'
 
-export const useUserStore = defineStore('user', {
-    state: () => ({
-        user: {
-            username: '',
-            first_name: '',
-            last_name: '',
-            email: '',
-            password: '',
-            password_confirmation: '',
-        },
-        respuesta: null,
-    }),
-    actions: {
-        async crearUsuario(){
-            try{
-                const respuesta = await axios.post('http://localhost:8000/api/v1/users/',this.user);
-                this.respuesta = respuesta.data;
-            }
-            catch(error){
-                console.log(error);
-            }
+// Metodos para el uso de la api
+type Metodo = "GET" | "POST" | "PUT" | "DELETE";
+
+
+export const useUserStore = defineStore('user', ()=>{
+    const datos = ref([]); // Eje para devolver los datos
+
+    // Almacenar el token generado en django
+    const access_token = ref<string|null>(null);
+
+
+    // Funcion para obtener todos los usuarios
+    const apiUsuarios = async (link?: string, metodo: Metodo|null = null, data?: object, token: string|null = null):Promise<any> => {
+
+        try {
+
+            // Cargar datos con lo de la peticion
+            datos.value = await axios.request({
+                url: link,
+                method: metodo as string,
+                data: data,
+                headers: token !== null ? { Authorization: `Bearer ${token}` } : {}
+            }).then(response => {
+                return response.data
+            }).catch(error => {
+                return error
+            });
+
+            return datos.value;
+            
+        } catch (error) {
+            console.log(error);
         }
+        // Finalizar de pasar los datos a variable 
     }
-});
+
+    return {apiUsuarios, access_token}
+})
