@@ -28,8 +28,20 @@ class LoginUsuario(APIView):
             login(request, usuario) # Iniciar sesion
             # Crear token de acceso
             access = RefreshToken.for_user(usuario)
-            
-            return Response({'status':True,'access':str(access.access_token)},status=state.HTTP_200_OK)
+            # Crear una cookie desde django y solo accecible en el servidor
+            response = Response({'status':True,'access':str(access.access_token)},status=state.HTTP_200_OK)
+
+
+            response.set_cookie(
+                key='access',
+                value=str(access.access_token),
+                max_age=3600,
+                httponly=True,
+                secure=True,
+                samesite='Strict'
+            )
+            # Retornar el json
+            return response
 
         return Response({'status':False},status=state.HTTP_400_BAD_REQUEST)
         
@@ -56,3 +68,13 @@ class Usuarios(APIView):
             return Response({'status':True},status=state.HTTP_200_OK)
         # Si no es valido
         return Response({'status':False},status=state.HTTP_400_BAD_REQUEST)
+
+class LogoutUsuario(APIView):
+    # El usuario ha cerrar sesion dede estar autenticado
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        logout(request)
+        response = Response({'logout':True},status=state.HTTP_200_OK)
+        response.delete_cookie('access') # Eliminar la cookie con la autorizacion
+        return response

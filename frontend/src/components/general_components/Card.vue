@@ -12,21 +12,24 @@
                         <article class="d-flex justify-content-between" v-if="props.cumplido">
                             <Boton msg="Hecha" color="success" tipo="button" @funcion_btn="console.log('Boton hecha')" />
                             <Boton msg="Editar" color="primary" tipo="button" @funcion_btn="console.log('Boton editar')" />
-                            <Boton msg="Eliminar" color="danger" tipo="button" @funcion_btn="console.log('Boton eliminar')" />
+                            <Boton msg="Eliminar" color="danger" tipo="button" @funcion_btn="borrarTarea" />
                         </article>
                     </article>
                 </section>
                 <!-- Prioridad de la tarea -->
                 <section class="card-header">
                     <article class="card-text">
-                        <span class="badge text-bg-primary">Cumplido</span>
+                        <span class="badge text-bg-success" v-if="props.estado === 'HECHO'">Cumplido</span>
+                        <span class="badge text-bg-primary" v-else-if="props.estado === 'EN_PROGRESO'">En proceso</span>
+                        <span class="badge text-bg-danger" v-else>Pendiente</span>
                     </article>
                 </section>
                 <!-- Pie de card -->
                 <section class="card-footer">
                     <article class="card-text d-flex justify-content-between">
-                        <p>Fecha de creación: 2023-01-01</p>
-                        <p>Fecha de modificación: 2023-01-01</p>
+                        <!-- Queda pendiente arreglar la fecha-->
+                        <p>Fecha de creación: {{ formaterFechaCreacion }}</p>
+                        <p>Fecha de modificación: {{ formaterFechaModificacion }}</p>
                     </article>
                 </section>
             </article>
@@ -38,18 +41,23 @@
 import {ref, defineProps, computed} from 'vue'
 // Importar los componente generales
 import Boton from './Boton.vue'
+import { Todo } from '../../interfaces/interfaces'
+import { useAlertStore } from '../../stores/alertStore';
+import { useUserStore } from '../../stores/userStore';
+import { useTodoStore } from '../../stores/todoStore';
+
+// Para formatear la fecha
+import dayjs from 'dayjs';
+
+const alertas = useAlertStore(); // Alertas
+
+const apiTodos = useUserStore(); // Utilizar el api context
 
 const claseText = ref<String>("text-decoration-line-through");
 
-type Property = {
-    titulo: String,
-    descripcion: String,
-    fecha_creacion?: String,
-    fecha_modificacion?: String,
-    estado?: String,
-    // Especiicar si la tarea se completo
-    cumplido?: Boolean,
-}
+const todos = useTodoStore(); // Utilizar store de tareas
+
+
 
 // Propiedad computada
 const clases = computed(() => {
@@ -63,8 +71,29 @@ const clases = computed(() => {
 })
 
 // Definir las propiedades del componente
-const props = defineProps<Property>();
+const props = defineProps<Todo>();
 
+// Formatear fecha
+const formaterFechaCreacion = computed(() => {
+    return props.fecha_creacion ? dayjs(props.fecha_creacion).format('DD/MM/YYYY') : '---';
+})
+
+const formaterFechaModificacion = computed(() => {
+    return props.fecha_modificacion ? dayjs(props.fecha_modificacion).format('DD/MM/YYYY') : '----';
+})
+
+
+// ------------------------------------- Funciones de crud en tareas
+
+const borrarTarea = async() => {
+    let response = await apiTodos.apiUsuarios("http://localhost:8000/api/todos/"+props.id, "DELETE");
+    if(response.deleted === true){
+        alertas.mostrarAlerta("Éxito", "Tarea eliminada con éxito", "success", "#0c64b7",true)
+        todos.todoStoreData = await apiTodos.apiUsuarios("http://localhost:8000/api/todos/", "GET");
+    }else{
+        alertas.mostrarAlerta("Error", "No se ha podido eliminar la tarea", "error", "#0c64b7",true)
+    }
+}
 
 </script>
 

@@ -14,12 +14,15 @@ class Tareas(models.Model):
     class Meta:
         db_table = 'tareas'
         verbose_name = 'Tarea'
+        # Orden de tabla
+        ordering = ['-id']
+
 
     # Campos de la tabla tareas
     titulo = models.CharField('Titulo',max_length=100)
     descripcion = models.TextField('Descripción',blank=True,max_length=500)
     estado = models.CharField('Estado', choices=TareaEstado, default=TareaEstado.TODO)
-    fecha_creacion = models.DateTimeField('Fecha de creación',auto_now_add=True)
-    fecha_modificacion = models.DateTimeField('Fecha de modificación',auto_now=True)
+    fecha_creacion = models.DateTimeField('Fecha de creación',auto_now_add=True, blank=True)
+    fecha_modificacion = models.DateTimeField('Fecha de modificación',auto_now_add=True, blank=True)
     # Llave foranea de usuarios para saber que tareas tiene
     user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -6,6 +6,6 @@ from django.urls import path, include
 app_name = 'to_do'
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('apps.todo_list.urls')), # Rutas de las tareas
+    path('api/todos/', include('apps.todo_list.urls')), # Rutas de las tareas
     path('api/users/', include('apps.usuarios.urls')), # Rutas de los usuarios
 ]

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Tareas
-from django.contrib.auth.models import User
+from .models import Tareas
 
 class TareasSerializer(serializers.ModelSerializer):
 
@@ -8,10 +8,9 @@ class TareasSerializer(serializers.ModelSerializer):
     titulo = serializers.CharField(max_length=100)
     descripcion = serializers.CharField(max_length=500)
     estado = serializers.CharField(max_length=100)
-    fecha_creacion = serializers.DateTimeField()
-    fecha_modificacion = serializers.DateTimeField()
 
     class Meta:
         model = Tareas
-        fields = ['titulo','descripcion','estado','fecha_creacion','fecha_modificacion']
+        fields = ['id','titulo','descripcion','estado','fecha_creacion','fecha_modificacion','user']
+
 

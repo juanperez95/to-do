@@ -98,7 +98,7 @@ const enviarRegistroUsuario = async() => {
             datosFormulario.email = "";
             datosFormulario.password = ""; 
             // Limpiar el campo de confirmacion
-            let password = document.getElementById('password_confirmation')?.value;
+            let password = document.getElementById('password_confirmation');
             password.value = "";
         }else{
             alertStore.mostrarAlerta("Error", "El usuario no se ha registrado", "error", "#0c64b7",true)

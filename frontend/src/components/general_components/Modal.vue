@@ -12,18 +12,18 @@
                 </div>
                 <div class="modal-body">
                     <!-- Campos de la tarea si la opcion is_login esta activo -->
-                    <form @submit.prevent method="post" v-if="!is_login">
+                    <form @submit.prevent="crearTarea" method="post" v-if="!is_login">
                         <article class="mt-3">
                             <label for="titulo">Titulo</label>
-                            <input type="text" class="form-control" id="titulo" placeholder="Titulo de la tarea" required>
+                            <input type="text" class="form-control" id="titulo" placeholder="Titulo de la tarea" required v-model="dataTarea.titulo">
                         </article>
                         <article class="mt-3">
                             <label for="descripcion">Descripción</label>
-                            <textarea class="form-control" id="descripcion" rows="3" required></textarea>
+                            <textarea class="form-control" id="descripcion" rows="3" required v-model="dataTarea.descripcion"></textarea>
                         </article>
                         <article class="mt-3">
                             <label for="estado">Estado</label>
-                            <select class="form-control" id="estado" required>
+                            <select class="form-control" id="estado" required v-model="dataTarea.estado">
                                 <option value="TODO">Pendiente de realizar</option>
                                 <option value="EN_PROGRESO">En progreso</option>
                                 <option value="HECHO">Realizado</option>
@@ -62,20 +62,23 @@
 
 <script setup lang="ts">
 import Boton from './Boton.vue'
-import {defineProps} from 'vue'
 import { useUserStore } from '../../stores/userStore' // Api de la aplicacion
-import { Login, Usuario } from '../../interfaces/interfaces'
+import { Login, Usuario, Todo } from '../../interfaces/interfaces'
 import { reactive } from 'vue'
 import { useAlertStore } from '../../stores/alertStore'
+import { useTodoStore } from '../../stores/todoStore'
 
 
 const alertas = useAlertStore();
 
+const todos = useTodoStore(); // Utilizar store de tareas
+
 
 const props = defineProps<Login>();
 
-// Deinir la api
+// Definir la api
 const apiModal = useUserStore();
+
 
 // Datos para iniciar la sesion
 const dataSesion = reactive<Usuario>({
@@ -83,15 +86,38 @@ const dataSesion = reactive<Usuario>({
     password: "",
 });
 
+// Datos para crear tarea
+const dataTarea = reactive<Todo>({
+    titulo: "",
+    descripcion: "",
+    estado: "",
+});
+
 // Funcion para validar he iniciar sesion con el token
 const inicioSesion = async() => {
     // Obtener el token en el store de la aplicacion
     let response = await apiModal.apiUsuarios("http://localhost:8000/api/users/login", "POST", dataSesion);
-    if(response.status){
+    if(response.status === true){
         alertas.mostrarAlerta("Éxito", "Sesión iniciada con éxito", "success", "#0c64b7",true)
         apiModal.access_token = response.access; // Guardar el token
+        // Esperar a que se muestre el mensaje para cerrar sesion
+        setTimeout(() => {
+            window.location.reload()
+        }, 2000)
     }else{
-        alertas.mostrarAlerta("Error", "No se ha podido iniciar sesión", "warning", "#0c64b7",true)
+        alertas.mostrarAlerta("Error", "Las credenciales no son correctas", "error", "#0c64b7",true)
+    }
+}
+
+// Funcion para crear tarea solo si esta logueado
+const crearTarea = async() => {
+    let response = await apiModal.apiUsuarios("http://localhost:8000/api/todos/", "POST", dataTarea);
+    if(response.created === true){
+        alertas.mostrarAlerta("Éxito", "Tarea creada con éxito", "success", "#0c64b7",true)
+        // Actualizar la lista de tareas
+        todos.todoStoreData = await apiModal.apiUsuarios("http://localhost:8000/api/todos/", "GET");
+    }else{
+        alertas.mostrarAlerta("Error", "No se ha podido crear la tarea", "error", "#0c64b7",true)
     }
 }
 </script>

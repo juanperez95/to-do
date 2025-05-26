@@ -6,6 +6,7 @@ import {ref} from 'vue'
 type Metodo = "GET" | "POST" | "PUT" | "DELETE";
 
 
+
 export const useUserStore = defineStore('user', ()=>{
     const datos = ref([]); // Eje para devolver los datos
 
@@ -23,7 +24,8 @@ export const useUserStore = defineStore('user', ()=>{
                 url: link,
                 method: metodo as string,
                 data: data,
-                headers: token !== null ? { Authorization: `Bearer ${token}` } : {}
+                headers: token !== null ? { Authorization: `Bearer ${token}` } : {},
+                withCredentials: true,
             }).then(response => {
                 return response.data
             }).catch(error => {

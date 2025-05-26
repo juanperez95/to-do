@@ -13,7 +13,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         # Solo mostrar estos campos
-        fields = ['username','first_name','last_name','email']
+        fields = ['username','first_name','last_name','email','password']
 
     def create(self, validated_data):
         # Crear el usuario
