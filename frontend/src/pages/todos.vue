@@ -3,15 +3,17 @@
         <section>
             <h3>Tus tareas</h3>
             <!-- Mostrar todos las tareas -->
-            <article v-if="todos.todoStoreData.length !== 0 && !error" class="row" v-for="tarea in todos.todoStoreData" :key="tarea.id">
-                <Card :titulo="tarea.titulo" :descripcion="tarea.descripcion" class="col" v-if="tarea.estado === 'TODO' || tarea.estado === 'EN_PROGRESO'" :estado="tarea.estado" :cumplido="true"  :id="tarea.id"/>
-                <Card :titulo="tarea.titulo" :descripcion="tarea.descripcion" :fecha_creacion="tarea.fecha_creacion" :fecha_modificacion="tarea.fecha_modificacion" :estado="tarea.estado" class="col" v-else :id="tarea.id"/>
-            </article>
+            <section class="grid grid-cols-2 gap-3">
+                <article v-if="todos.todoStoreData.length !== 0 && !error" v-for="tarea in todos.todoStoreData" :key="tarea.id">
+                    <Card :titulo="tarea.titulo" :descripcion="tarea.descripcion" class="col" v-if="tarea.estado === 'TODO' || tarea.estado === 'EN_PROGRESO'" :estado="tarea.estado" :cumplido="true"  :id="tarea.id"/>
+                    <Card :titulo="tarea.titulo" :descripcion="tarea.descripcion" :fecha_creacion="tarea.fecha_creacion" :fecha_modificacion="tarea.fecha_modificacion" :estado="tarea.estado" class="col" v-else :id="tarea.id"/>
+                </article>
+            </section>
             <!-- Mostrar mensaje para que inicie sesion-->
-            <article v-else-if="error">
+            <article v-if="error">
                 <h4 class="text-center">¡Inicia sesion para ver tus tareas!</h4>
             </article>
-            <article v-else>
+            <article v-else-if="todos.todoStoreData.length === 0">
                 <h4 class="text-center">¡No tienes tareas pendientes!</h4>
             </article>
         </section>

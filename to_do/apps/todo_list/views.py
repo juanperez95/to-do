@@ -11,6 +11,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 import rest_framework.status as state
 from django.contrib.auth.models import User
+import datetime
 
 
 # Importar libreria json debido a que se envian datos en formato json
@@ -23,10 +24,21 @@ class ApiTodo(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        # Obtener todas las tareas
-        todos = Tareas.objects.filter(user=request.user.id)
-        todos_json = TareasSerializer(todos, many=True).data
-        # Devolver el json
+
+        data = request.GET.get("search","")
+        print(data)
+        if data == "": # si no se envia el dato get consulta todas las tareas del usuario       
+ 
+            # Obtener todas las tareas
+            todos = Tareas.objects.filter(user=request.user.id)
+            todos_json = TareasSerializer(todos, many=True).data
+        
+        if data.upper() in ["TODO","EN_PROGRESO","HECHO"]: # si se envia el dato get consulta las tareas del usuario
+            # Obtener todas las tareas
+            todos = Tareas.objects.filter(user=request.user.id,estado=data.upper())
+            todos_json = TareasSerializer(todos, many=True).data
+
+    
         return Response(todos_json, status=state.HTTP_200_OK)
 
     # Crear tarea
@@ -62,6 +74,17 @@ class TodoUpdate(APIView):
     # Permitir solo usuarios logueados
     permission_classes = [IsAuthenticated]
 
+    def get(self, request, pk):
+        # Obtener la tarea
+        try:
+            tarea = Tareas.objects.get(pk=pk) # filtar por el id la tarea
+            return Response({'todo':TareasSerializer(tarea).data}, status=state.HTTP_200_OK)
+        except Tareas.DoesNotExist:
+            pass
+        # Si no devuelve que no se encontro esa tarea
+        return Response({'message':'Tarea no encontrada'},status=state.HTTP_404_NOT_FOUND)
+        
+    # Actualizar la tarea con estado de hecho
     def put(self, request, pk):
         try:
             tarea = Tareas.objects.get(pk=pk) # Buscar la tarea con el id
@@ -72,5 +95,20 @@ class TodoUpdate(APIView):
             pass
         # Si no devuelve que no se pudo actualizar
         return Response({'updated':False},status=state.HTTP_404_NOT_FOUND)
+    
+    def patch(self, request, pk):
+        data = json.loads(request.body)
+        print(data)
+        try:
+            tarea = Tareas.objects.get(pk=pk) # Buscar la tarea con el id
+            tarea.titulo = data['titulo']
+            tarea.descripcion = data['descripcion']
+            tarea.estado = data['estado']
+            tarea.save() # Guardar el estado de hecho
+            return Response({'updatedTodo':True},status=state.HTTP_200_OK)
+        except Tareas.DoesNotExist:
+            pass
+        # Si no devuelve que no se pudo actualizar
+        return Response({'updatedTodo':False},status=state.HTTP_400_BAD_REQUEST)
         
 

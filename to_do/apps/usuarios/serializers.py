@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from apps.todo_list.models import Tareas
 
 # Usuarios
 class UsuarioSerializer(serializers.ModelSerializer):
@@ -18,4 +19,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         # Crear el usuario
         usuario = User.objects.create_user(**validated_data)
+        # Registrar una tarea por defecto cuando se registra un usuario
+        tarea = Tareas(titulo='Tarea inicial',descripcion='Descripcion de la tarea',estado='TODO',user=usuario)
+        tarea.save()
         return usuario

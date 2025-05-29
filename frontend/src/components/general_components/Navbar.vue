@@ -3,8 +3,8 @@
         <section>
         <nav class="navbar bg-body-tertiary d-flex justify-content-between">
             <div class="container-fluid">
-                <form class="d-flex" role="search" @submit.prevent>
-                    <input class="form-control me-2" type="search" placeholder="Filtrar tarea" aria-label="Search"/>
+                <form class="d-flex" role="search" @submit.prevent="busquedaTarea">
+                    <input class="form-control me-2" type="search" placeholder="Filtrar tarea" aria-label="Search" v-model="busqueda"/>
                     <button class="btn btn-outline-success" type="submit">Buscar</button>
                 </form>
                 <!-- Boton de crear tarea (Modal) -->
@@ -42,6 +42,8 @@ onMounted(() => {
     token.value = localStorage.getItem("access_token") as string;
 })
 
+const busqueda = ref<string>(""); // Variable para el dato de busqueda
+
 const dataLogout = ref<object>([]);
 
 const apiUsuarios = useUserStore(); // Utilizar el api context
@@ -69,7 +71,12 @@ const cerrarSesion = async() => {
     // Esperar a que se muestre el mensaje para cerrar sesion
     setTimeout(() => {
         window.location.reload()
-    }, 2000)
+    }, 1500)
+}
+
+// Funcion para ejecutar alguna busqueda
+const busquedaTarea = async() => {
+    apiTodos.todoStoreData = await apiUsuarios.apiUsuarios("http://localhost:8000/api/todos/?search="+busqueda.value, "GET");
 }
 
 </script>

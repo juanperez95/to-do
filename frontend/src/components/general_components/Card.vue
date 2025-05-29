@@ -8,13 +8,7 @@
                     <article class="card-text">
                         <!-- Descripción de la tarea -->
                         <p>{{ props.descripcion ? props.descripcion : 'Descripción de la tarea' }}</p>
-                        <!-- no mostrar los botones si la tarea ya se completo-->
-                        <article class="d-flex justify-content-between" v-if="props.cumplido">
-                            <!-- botones para ejecutar tareas -->
-                            <Boton msg="Hecha" color="success" tipo="button" @funcion_btn="actualizarTarea" />
-                            <Boton msg="Editar" color="primary" tipo="button" @funcion_btn="editarTarea" />
-                            <Boton msg="Eliminar" color="danger" tipo="button" @funcion_btn="borrarTarea" />
-                        </article>
+                        
                     </article>
                 </section>  
                 <!-- Prioridad de la tarea -->
@@ -30,6 +24,13 @@
                     <article class="card-text d-flex justify-content-between">
                         <!-- Queda pendiente arreglar la fecha-->
                         <p>Fecha de creación: {{ formaterFechaCreacion }}</p>
+                        <!-- no mostrar los botones si la tarea ya se completo-->
+                        <article class="d-flex justify-content-between" v-if="props.cumplido">
+                            <!-- botones para ejecutar tareas -->
+                            <Boton msg="check" color="success" tipo="button" @funcion_btn="actualizarTarea" />
+                            <Boton msg="edit" color="primary" tipo="button" @funcion_btn="editarTarea" />
+                            <Boton msg="delete" color="danger" tipo="button" @funcion_btn="borrarTarea" />
+                        </article>
                         <p>Fecha de modificación: {{ formaterFechaModificacion }}</p>
                     </article>
                 </section>
@@ -112,7 +113,7 @@ const actualizarTarea = async() => {
 
 // Funcion para editar la tarea 
 const editarTarea = async() => {
-    router.push("/actualizar-todo"); // Valida si esta logueado
+    router.push("/actualizar-todo/"+props.id); // Valida si esta logueado y manda el id de la tarea a editar
 }
 
 </script>

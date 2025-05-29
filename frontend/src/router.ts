@@ -8,7 +8,7 @@ import ActualizarTodo from "./pages/actualizar_todo.vue";
 const routes = [
     { path: "/", component: Todos },
     { path: "/crear-usuario", component: Main },
-    { path: "/actualizar-todo",component:ActualizarTodo , meta: { requiresAuth: true } }, // Ruta protegida debe estar autenticado
+    { path: "/actualizar-todo/:id",component:ActualizarTodo , meta: { requiresAuth: true } }, // Ruta protegida debe estar autenticado
 ];
 
 const router = createRouter({

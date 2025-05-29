@@ -3,7 +3,7 @@ import axios from 'axios';
 import {ref} from 'vue'
 
 // Metodos para el uso de la api
-type Metodo = "GET" | "POST" | "PUT" | "DELETE";
+type Metodo = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
 
 
