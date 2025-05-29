@@ -10,12 +10,13 @@
                         <p>{{ props.descripcion ? props.descripcion : 'Descripción de la tarea' }}</p>
                         <!-- no mostrar los botones si la tarea ya se completo-->
                         <article class="d-flex justify-content-between" v-if="props.cumplido">
-                            <Boton msg="Hecha" color="success" tipo="button" @funcion_btn="console.log('Boton hecha')" />
-                            <Boton msg="Editar" color="primary" tipo="button" @funcion_btn="console.log('Boton editar')" />
+                            <!-- botones para ejecutar tareas -->
+                            <Boton msg="Hecha" color="success" tipo="button" @funcion_btn="actualizarTarea" />
+                            <Boton msg="Editar" color="primary" tipo="button" @funcion_btn="editarTarea" />
                             <Boton msg="Eliminar" color="danger" tipo="button" @funcion_btn="borrarTarea" />
                         </article>
                     </article>
-                </section>
+                </section>  
                 <!-- Prioridad de la tarea -->
                 <section class="card-header">
                     <article class="card-text">
@@ -45,6 +46,8 @@ import { Todo } from '../../interfaces/interfaces'
 import { useAlertStore } from '../../stores/alertStore';
 import { useUserStore } from '../../stores/userStore';
 import { useTodoStore } from '../../stores/todoStore';
+import { useRouter } from 'vue-router';
+
 
 // Para formatear la fecha
 import dayjs from 'dayjs';
@@ -56,7 +59,7 @@ const apiTodos = useUserStore(); // Utilizar el api context
 const claseText = ref<String>("text-decoration-line-through");
 
 const todos = useTodoStore(); // Utilizar store de tareas
-
+const router = useRouter(); // Rutas
 
 
 // Propiedad computada
@@ -91,8 +94,25 @@ const borrarTarea = async() => {
         alertas.mostrarAlerta("Éxito", "Tarea eliminada con éxito", "success", "#0c64b7",true)
         todos.todoStoreData = await apiTodos.apiUsuarios("http://localhost:8000/api/todos/", "GET");
     }else{
-        alertas.mostrarAlerta("Error", "No se ha podido eliminar la tarea", "error", "#0c64b7",true)
+        alertas.mostrarAlerta("Error", "No se ha podido eliminar la tarea", "error", "#0c64b7",true);
     }
+}
+
+// Funcion para actualizar el estado de la tarea , la tarea esta hecha
+const actualizarTarea = async() => {
+    let response = await apiTodos.apiUsuarios("http://localhost:8000/api/todos/actualizar/"+props.id, "PUT");
+    if(response.updated === true){
+        alertas.mostrarAlerta("Exito", "¡Se ha actualizado la tarea satisfactoriamente!","success","#0c64b7",true);
+        // Volver a realizar peticion a la lista de tareas para actualizar las tareas
+        todos.todoStoreData = await apiTodos.apiUsuarios("http://localhost:8000/api/todos/", "GET");
+    }else{
+        alertas.mostrarAlerta("Error", "¡Hubo un problema actualizando la tarea!", "error", "#0c64b7",true);
+    }
+}
+
+// Funcion para editar la tarea 
+const editarTarea = async() => {
+    router.push("/actualizar-todo"); // Valida si esta logueado
 }
 
 </script>

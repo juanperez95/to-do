@@ -100,6 +100,7 @@ const inicioSesion = async() => {
     if(response.status === true){
         alertas.mostrarAlerta("Éxito", "Sesión iniciada con éxito", "success", "#0c64b7",true)
         apiModal.access_token = response.access; // Guardar el token
+        localStorage.setItem("access_token", apiModal.access_token); // Guardar el token en local storage
         // Esperar a que se muestre el mensaje para cerrar sesion
         setTimeout(() => {
             window.location.reload()

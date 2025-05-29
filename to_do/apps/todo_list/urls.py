@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import ApiTodo
+from .views import ApiTodo, TodoUpdate
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 app_name = 'todo' # Distinguir entre las rutas de la aplicacion
@@ -10,4 +10,5 @@ urlpatterns = [
     path('refresh',TokenRefreshView.as_view(), name='refresh'),
     # Rutas para tareas
     path('<int:pk>', ApiTodo.as_view(), name='tareas'), # Eliminar o actuallizar la tarea
+    path('actualizar/<int:pk>',TodoUpdate.as_view(), name='actualizar_tarea') # Actualziar la tarea
 ]

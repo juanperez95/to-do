@@ -13,10 +13,10 @@
                         <Modal :is_login="true" id_modal="registerModal"/>
                     </article>
                     <!-- Iniciar sesion -->
-                    <article v-if="apiTodos.todoStoreData.length !== 0 && !error">
+                    <article v-if="token && !error">
                         <Modal id_modal="loginModal"/>
                     </article>
-                    <article v-if="apiTodos.todoStoreData.length !== 0 && !error">
+                    <article v-if="token && !error">
 
                         <Boton msg="Cerrar sesion" color="danger" tipo="button" @funcion_btn="cerrarSesion" />
                     </article>
@@ -33,10 +33,14 @@
 import Modal from './Modal.vue'
 import Boton from './Boton.vue'
 import { useTodoStore } from '../../stores/todoStore';
-import {computed, ref} from 'vue';
+import {computed, ref, onMounted} from 'vue';
 import { useUserStore } from '../../stores/userStore';
 import { useAlertStore } from '../../stores/alertStore';
 
+const token = ref<string>("");
+onMounted(() => {
+    token.value = localStorage.getItem("access_token") as string;
+})
 
 const dataLogout = ref<object>([]);
 
@@ -57,6 +61,7 @@ const cerrarSesion = async() => {
     dataLogout.value = await apiUsuarios.apiUsuarios("http://localhost:8000/api/users/logout", "GET");
     console.log(dataLogout.value);
     if(dataLogout.value.logout === true){
+        localStorage.removeItem("access_token"); // Eliminar el token de la sesion
         alertas.mostrarAlerta("Éxito", "Sesión cerrada con éxito", "success", "#0c64b7",true)
     }else{
         alertas.mostrarAlerta("Error", "No se ha podido cerrar la sesión", "error", "#0c64b7",true)

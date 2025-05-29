@@ -78,3 +78,15 @@ class LogoutUsuario(APIView):
         response = Response({'logout':True},status=state.HTTP_200_OK)
         response.delete_cookie('access') # Eliminar la cookie con la autorizacion
         return response
+
+class AuthUsuario(APIView):
+    # Validar cualquier peticion
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        # Validar la sesion del usuario
+        if request.user.is_authenticated:
+            return Response({'auth':True},status=state.HTTP_200_OK)
+
+        # de lo contrario devuelve false
+        return Response({'auth':False},status=state.HTTP_401_UNAUTHORIZED)

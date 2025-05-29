@@ -65,8 +65,8 @@ class TodoUpdate(APIView):
     def put(self, request, pk):
         try:
             tarea = Tareas.objects.get(pk=pk) # Buscar la tarea con el id
-            tarea.estado = request.data['estado']
-            tarea.save()
+            tarea.estado = "HECHO"
+            tarea.save() # Guardar el estado de hecho
             return Response({'updated':True},status=state.HTTP_200_OK)
         except Tareas.DoesNotExist:
             pass
