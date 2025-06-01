@@ -18,6 +18,9 @@ class LoginUsuario(APIView):
 
     permission_classes = [AllowAny] # Cualquiera ingresa
 
+    def get(self,request):
+        return Response({'user':f"{request.user.first_name} {request.user.last_name}".title()},status=state.HTTP_200_OK)
+
     def post(self,request):
         data = json.loads(request.body)
         username = data['username']

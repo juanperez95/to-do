@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="">
         <section>
             <article class="d-flex justify-content-between">
                 <h3>Registrase</h3>

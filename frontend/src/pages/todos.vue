@@ -1,7 +1,7 @@
 <template>
     <div>
         <section>
-            <h3>Tus tareas</h3>
+            <h3 class="">{{ userName.user !== undefined ? ("Bienvenido/a " + userName.user) : "" }}</h3>
             <!-- Mostrar todos las tareas -->
             <section class="grid grid-cols-2 gap-3">
                 <article v-if="todos.todoStoreData.length !== 0 && !error" v-for="tarea in todos.todoStoreData" :key="tarea.id">
@@ -30,6 +30,7 @@ const userStore = useUserStore();
 
 // Recibir todas las tareas de la api
 const todos = useTodoStore();
+const userName = ref<string|object>("");
 
 const axiosError = ref<string>("AxiosError");
 
@@ -37,6 +38,8 @@ const axiosError = ref<string>("AxiosError");
 onMounted(async() => {
     // Obtener todos los usuarios
     todos.todoStoreData = await userStore.apiUsuarios("http://localhost:8000/api/todos/", "GET");
+    // Nombre de usuario
+    userName.value = await userStore.apiUsuarios("http://localhost:8000/api/users/login", "GET");
 })
 
 // Validar si no hay error en axios

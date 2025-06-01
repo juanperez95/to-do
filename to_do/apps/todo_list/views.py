@@ -30,12 +30,12 @@ class ApiTodo(APIView):
         if data == "": # si no se envia el dato get consulta todas las tareas del usuario       
  
             # Obtener todas las tareas
-            todos = Tareas.objects.filter(user=request.user.id)
+            todos = Tareas.objects.filter(user=request.user.id)[:10]
             todos_json = TareasSerializer(todos, many=True).data
         
         if data.upper() in ["TODO","EN_PROGRESO","HECHO"]: # si se envia el dato get consulta las tareas del usuario
             # Obtener todas las tareas
-            todos = Tareas.objects.filter(user=request.user.id,estado=data.upper())
+            todos = Tareas.objects.filter(user=request.user.id,estado=data.upper())[:10]
             todos_json = TareasSerializer(todos, many=True).data
 
     

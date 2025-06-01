@@ -5,12 +5,12 @@
         <!-- Modal -->
         <div class="modal fade" :id="props.id_modal.toString()" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
-                <div class="modal-content">
+                <div :class="['modal-content',theme.theme]">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">{{ !is_login ? 'Crear tarea' : 'Iniciar sesion' }}</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div :class="['modal-body',theme.theme]">
                     <!-- Campos de la tarea si la opcion is_login esta activo -->
                     <form @submit.prevent="crearTarea" method="post" v-if="!is_login">
                         <article class="mt-3">
@@ -67,6 +67,10 @@ import { Login, Usuario, Todo } from '../../interfaces/interfaces'
 import { reactive } from 'vue'
 import { useAlertStore } from '../../stores/alertStore'
 import { useTodoStore } from '../../stores/todoStore'
+import { useThemeStore } from '../../stores/themeStore';
+
+
+const theme = useThemeStore(); // Variable global para el tema
 
 
 const alertas = useAlertStore();
@@ -78,6 +82,7 @@ const props = defineProps<Login>();
 
 // Definir la api
 const apiModal = useUserStore();
+
 
 
 // Datos para iniciar la sesion

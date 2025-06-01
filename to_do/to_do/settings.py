@@ -154,9 +154,6 @@ CORS_ALLOW_CREDENTIALS = True
 
 # Configuracion de jwt
 JWT_AUTH = {
-    'JWT_ALLOW_REFRESH': True,
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'JWT_AUTH_HEADER_PREFIX': 'Bearer',
-    'JWT_AUTH_COOKIE': None,
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(minutes=30),
 }

@@ -1,14 +1,19 @@
 <template>
     <div>
-        <section>
-        <nav class="navbar bg-body-tertiary d-flex justify-content-between">
+        <section class="">
+            <nav :class="['navbar bg-gray-200 d-flex justify-content-between',theme.theme]">
             <div class="container-fluid">
                 <form class="d-flex" role="search" @submit.prevent="busquedaTarea">
                     <input class="form-control me-2" type="search" placeholder="Filtrar tarea" aria-label="Search" v-model="busqueda"/>
-                    <button class="btn btn-outline-success" type="submit">Buscar</button>
+                    <button class="btn btn-secondary" type="submit">Buscar</button>
                 </form>
                 <!-- Boton de crear tarea (Modal) -->
                 <article class="d-flex align-items-center">
+                    <!-- boton para tema claro oscuro -->
+                    <article>
+                        <!-- Validar el cambio de icono y color al cambiar el tema -->
+                        <Boton msg="" :color="theme.theme === '' ? 'dark' : 'warning'" tipo="button" :icono="theme.theme === '' ? 'fa-solid fa-moon' : 'fa-solid fa-sun'" @funcion_btn="theme.cambiarTheme"/>
+                    </article>
                     <article v-if="error">
                         <Modal :is_login="true" id_modal="registerModal"/>
                     </article>
@@ -23,6 +28,7 @@
                     <!-- Redirigir a la pagina de crear usuario -->
                     <Boton msg="Crear usuario" color="primary" tipo="button" @funcion_btn="()=>{$router.push('/crear-usuario')}" icono="fa-solid fa-user-plus"/>
                 </article>
+                
             </div>
         </nav>
         </section>
@@ -36,6 +42,9 @@ import { useTodoStore } from '../../stores/todoStore';
 import {computed, ref, onMounted} from 'vue';
 import { useUserStore } from '../../stores/userStore';
 import { useAlertStore } from '../../stores/alertStore';
+import { useThemeStore } from '../../stores/themeStore';
+
+const theme = useThemeStore(); // Variable global para el tema 
 
 const token = ref<string>("");
 onMounted(() => {
@@ -78,6 +87,8 @@ const cerrarSesion = async() => {
 const busquedaTarea = async() => {
     apiTodos.todoStoreData = await apiUsuarios.apiUsuarios("http://localhost:8000/api/todos/?search="+busqueda.value, "GET");
 }
+
+
 
 </script>
 

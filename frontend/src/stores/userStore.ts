@@ -37,7 +37,6 @@ export const useUserStore = defineStore('user', ()=>{
         } catch (error) {
             console.log(error);
         }
-        // Finalizar de pasar los datos a variable 
     }
 
     return {apiUsuarios, access_token}

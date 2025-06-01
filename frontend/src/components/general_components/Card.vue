@@ -1,9 +1,9 @@
 <template>
     <div>
-        <section>
-            <article class="card p-3">
+        <section class="">
+            <article :class="['card p-3 border-1 border-white',theme.theme]">
                 <!-- Titulo de la tarea -->
-                <article :class="['card-title p-2 m-3 text-center',clases]"><h3>{{ props.titulo }}</h3></article>
+                <article :class="['card-title p-2 m-3 text-center',clases,theme.theme]"><h3>{{ props.titulo }}</h3></article>
                 <section class="card-body">
                     <article class="card-text">
                         <!-- Descripción de la tarea -->
@@ -48,6 +48,9 @@ import { useAlertStore } from '../../stores/alertStore';
 import { useUserStore } from '../../stores/userStore';
 import { useTodoStore } from '../../stores/todoStore';
 import { useRouter } from 'vue-router';
+import { useThemeStore } from '../../stores/themeStore';
+
+const theme = useThemeStore(); // Variable global para el tema
 
 
 // Para formatear la fecha
