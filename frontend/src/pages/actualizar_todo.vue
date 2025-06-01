@@ -3,8 +3,8 @@
         <section class="p-3">    
             <article>
                 <article class="d-flex justify-content-between">
-                    <h3>¡Actualizacion de tarea!</h3>
-                    <Boton msg="< Atras" color="second" tipo="button" @funcion_btn="$router.push('/')" />
+                    <h3>¡Actualizacion de tarea! : {{ tarea.titulo.toUpperCase() }}</h3>
+                    <Boton msg="< Atras" color="secondary" tipo="button" @funcion_btn="$router.push('/')" icono="fa-solid fa-arrow-left"/>
                 </article>
                 <article>
                     <form @submit.prevent="enviarDatos" method="patch">
@@ -25,7 +25,7 @@
                             </select>
                         </article>
                         <article class="form-group">
-                            <Boton msg="Actualizar" color="success" tipo="button" @funcion_btn="enviarDatos" />
+                            <Boton msg="Actualizar" color="success" tipo="button" @funcion_btn="enviarDatos" icono="fa-solid fa-check"/>
                         </article>
                     </form>
                 </article>

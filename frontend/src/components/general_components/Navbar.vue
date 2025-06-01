@@ -18,10 +18,10 @@
                     </article>
                     <article v-if="token && !error">
 
-                        <Boton msg="Cerrar sesion" color="danger" tipo="button" @funcion_btn="cerrarSesion" />
+                        <Boton msg="Cerrar sesion" color="danger" tipo="button" @funcion_btn="cerrarSesion" icono="fa-solid fa-right-from-bracket"/>
                     </article>
                     <!-- Redirigir a la pagina de crear usuario -->
-                    <Boton msg="Crear usuario" color="primary" tipo="button" @funcion_btn="()=>{$router.push('/crear-usuario')}" />
+                    <Boton msg="Crear usuario" color="primary" tipo="button" @funcion_btn="()=>{$router.push('/crear-usuario')}" icono="fa-solid fa-user-plus"/>
                 </article>
             </div>
         </nav>

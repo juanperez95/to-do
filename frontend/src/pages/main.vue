@@ -4,7 +4,7 @@
             <article class="d-flex justify-content-between">
                 <h3>Registrase</h3>
                 <!-- Boton de atras -->
-                <Boton msg="< Atras" color="second" tipo="button" @funcion_btn="()=>{$router.push('/')}" />
+                <Boton msg="Atras" color="secondary" tipo="button" @funcion_btn="()=>{$router.push('/')}" icono="fa-solid fa-arrow-left"/>
             </article>
             <article class="p-3 container">
                 <!-- Formulario para crear usuarios -->
@@ -46,7 +46,7 @@
                     <!-- Boton de crear usuario -->
                     <section class="row mt-4 p-3">
                         <article class="col d-flex justify-content-end">
-                            <Boton msg="Crear usuario" color="primary" tipo="submit" />
+                            <Boton msg="Crear usuario" color="primary" tipo="submit" icono="fa-solid fa-user-plus"/>
                         </article>
                     </section>
                 </form>

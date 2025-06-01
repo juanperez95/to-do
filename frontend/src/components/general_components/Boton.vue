@@ -1,13 +1,12 @@
 <template>
   <div>
     <section>
-      <button @click="click" :class="'p-2 m-3 btn btn-'+color" :type="tipo ? tipo : 'button'">{{ msg ? msg : 'Colocar mensaje' }}</button>
+      <button @click="click" :class="'p-2 m-3 btn btn-'+color" :type="tipo ? tipo : 'button'"><span class="p-2" v-if="icono !== undefined"><i :class="icono"></i></span> {{ msg }}</button>
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue'
 
 // Declarar un emit para la funcion del boton
 const emit = defineEmits(['funcion_btn'])
@@ -19,7 +18,8 @@ const props = defineProps({
     type: String,
     required: true,
   },
-  tipo:String|undefined
+  tipo:String|undefined,
+  icono:String|undefined,
 })
 
 // Funcion para ejecutar el evento de click

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Boton tipo="button" color="success" data-bs-toggle="modal" :data-bs-target="'#'+props.id_modal" :msg=" !is_login ? 'Crear tarea' : 'Iniciar sesion'"/>
+        <Boton tipo="button" color="success" data-bs-toggle="modal" :data-bs-target="'#'+props.id_modal" :msg=" !is_login ? 'Crear tarea' : 'Iniciar sesion'" icono="fa-solid fa-user"/>
 
         <!-- Modal -->
         <div class="modal fade" :id="props.id_modal.toString()" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -31,8 +31,8 @@
                         </article>
                         <!-- Boton de crear tarea -->
                         <div class="modal-footer">
-                            <Boton tipo="button" color="secondary" data-bs-dismiss="modal" msg="Cerrar"/>
-                            <Boton tipo="submit" color="primary" msg="Guardar tarea"/>
+                            <Boton tipo="button" color="secondary" data-bs-dismiss="modal" msg="Cerrar" icono="fa-solid fa-circle-xmark" />
+                            <Boton tipo="submit" color="primary" msg="Guardar tarea" icono="fa-solid fa-floppy-disk"/>
                         </div>
                     </form>
 
@@ -48,8 +48,8 @@
                         </article>
                         <!-- Boton de crear tarea -->
                         <div class="modal-footer">
-                            <Boton tipo="button" color="secondary" data-bs-dismiss="modal" msg="Cerrar"/>
-                            <Boton tipo="submit" color="primary" msg="Entrar"/>
+                            <Boton tipo="button" color="secondary" data-bs-dismiss="modal" msg="Cerrar" icono="fa-solid fa-circle-xmark"/>
+                            <Boton tipo="submit" color="primary" msg="Entrar" icono="fa-solid fa-right-from-bracket"/>
                         </div>
                     </form>
 

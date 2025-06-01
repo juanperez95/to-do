@@ -27,9 +27,9 @@
                         <!-- no mostrar los botones si la tarea ya se completo-->
                         <article class="d-flex justify-content-between" v-if="props.cumplido">
                             <!-- botones para ejecutar tareas -->
-                            <Boton msg="check" color="success" tipo="button" @funcion_btn="actualizarTarea" />
-                            <Boton msg="edit" color="primary" tipo="button" @funcion_btn="editarTarea" />
-                            <Boton msg="delete" color="danger" tipo="button" @funcion_btn="borrarTarea" />
+                            <Boton msg="" color="success" tipo="button" @funcion_btn="actualizarTarea" icono="fa-solid fa-check"/>
+                            <Boton msg="" color="primary" tipo="button" @funcion_btn="editarTarea" icono="fa-solid fa-pencil"/>
+                            <Boton msg="" color="danger" tipo="button" @funcion_btn="borrarTarea" icono="fa-solid fa-trash"/>
                         </article>
                         <p>Fecha de modificación: {{ formaterFechaModificacion }}</p>
                     </article>
