@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import Main from "./pages/main.vue";
 import Todos from "./pages/todos.vue";
 import ActualizarTodo from "./pages/actualizar_todo.vue";
+import Perfil from "./pages/perfil.vue";
 
 
 // Rutas del aplicativo
@@ -9,6 +10,7 @@ const routes = [
     { path: "/", component: Todos },
     { path: "/crear-usuario", component: Main },
     { path: "/actualizar-todo/:id",component:ActualizarTodo , meta: { requiresAuth: true } }, // Ruta protegida debe estar autenticado
+    { path: "/perfil", component: Perfil },
 ];
 
 const router = createRouter({

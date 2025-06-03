@@ -21,9 +21,12 @@
                     <article v-if="token && !error">
                         <Modal id_modal="loginModal"/>
                     </article>
-                    <article v-if="token && !error">
-
+                    <article v-if="token && !error">                        
                         <Boton msg="Cerrar sesion" color="danger" tipo="button" @funcion_btn="cerrarSesion" icono="fa-solid fa-right-from-bracket"/>
+                    </article>
+                    <article v-if="token && !error">
+                        <!-- Boton para actualizar la informacion del perfil-->
+                        <Boton msg="Perfil" color="dark" tipo="button" icono="fa-solid fa-user-pen" @funcion_btn="()=>{$router.push('/perfil')}"/>
                     </article>
                     <!-- Redirigir a la pagina de crear usuario -->
                     <Boton msg="Crear usuario" color="primary" tipo="button" @funcion_btn="()=>{$router.push('/crear-usuario')}" icono="fa-solid fa-user-plus"/>

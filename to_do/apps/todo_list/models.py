@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
+import uuid
 
 # Create your models here.
 class Tareas(models.Model):
@@ -19,6 +20,7 @@ class Tareas(models.Model):
 
 
     # Campos de la tabla tareas
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False) # Generar id aleatorio para la API
     titulo = models.CharField('Titulo',max_length=100)
     descripcion = models.TextField('Descripción',blank=True,max_length=500)
     estado = models.CharField('Estado', choices=TareaEstado, default=TareaEstado.TODO)

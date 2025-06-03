@@ -12,6 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 import rest_framework.status as state
 from django.contrib.auth.models import User
 import datetime
+import uuid
 
 
 # Importar libreria json debido a que se envian datos en formato json
@@ -77,7 +78,7 @@ class TodoUpdate(APIView):
     def get(self, request, pk):
         # Obtener la tarea
         try:
-            tarea = Tareas.objects.get(pk=pk) # filtar por el id la tarea
+            tarea = Tareas.objects.get(id=uuid.UUID(pk)) # filtar por el id la tarea
             return Response({'todo':TareasSerializer(tarea).data}, status=state.HTTP_200_OK)
         except Tareas.DoesNotExist:
             pass
