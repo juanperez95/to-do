@@ -16,7 +16,7 @@ export type Login = {
 
 // Interface para definir la tarea
 export type Todo = {
-    id?: number,
+    id?: String, // Se maneja id de django en formato UUID
     titulo: String,
     descripcion: String,
     fecha_creacion?: String,

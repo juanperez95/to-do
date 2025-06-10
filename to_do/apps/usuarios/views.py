@@ -54,11 +54,16 @@ class Usuarios(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-        # Obtener todos los usuarios
-        usuarios = User.objects.all()
-        usuarios_json = UsuarioSerializer(usuarios, many=True).data
-        # Devolver el json
-        return Response(usuarios_json, status=state.HTTP_200_OK)
+        # obtener el usuario que ha iniciado sesion
+        try:
+            usuario = User.objects.get(id=request.user.id)
+            usuarioSerializer = UsuarioSerializer(usuario).data # Serializar el usuario
+
+            return Response({'usuario':usuarioSerializer}, status=state.HTTP_200_OK) # Devolver OK
+        except User.DoesNotExist as e:
+            pass
+        # Devolver el json en caso de algun problema con la peticion
+        return Response({'usuario':False}, status=state.HTTP_404_NOT_FOUND)
 
     def post(self, request):
         print("Entra")
