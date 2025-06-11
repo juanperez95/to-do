@@ -8,6 +8,10 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate, login, logout
 from .serializers import UsuarioSerializer
 from django.views.generic import TemplateView
+# Envio de correos y renderizacion  de HTML
+from django.core.mail import send_mail, EmailMultiAlternatives
+from django.utils.html import strip_tags
+from django.template.loader import render_to_string
 
 # Importar libreria json debido a que se envian datos en formato json
 import json
@@ -73,9 +77,28 @@ class Usuarios(APIView):
         if user.is_valid():
             # Crear el usuario
             user.save()
+            # Enviar correo de registro al usuario
+            envio_correo_registro(self, request, 'Registro de usuario', request.data['email'], 'emails/registro.html')
             return Response({'status':True},status=state.HTTP_200_OK)
         # Si no es valido
         return Response({'status':False},status=state.HTTP_400_BAD_REQUEST)
+
+
+    def patch(self, request):
+        # Validar si solo se va actualizar la info basica del perfil
+        usuario = User.objects.get(id=request.user.id) # Obtener el usuario
+        if request.data['info_basica']:
+            usuario.first_name = request.data['basico']['first_name']
+            usuario.last_name = request.data['basico']['last_name']
+            usuario.username = request.data['basico']['username']
+            usuario.save()
+            return Response({'update-basico':True},status=state.HTTP_200_OK)
+        
+        # Validar si solo va a cambiar la contraseña
+        if request.data['clave']:
+            usuario.set_password(request.data['password'])
+            usuario.save()
+            return Response({'update-password':True},status=state.HTTP_200_OK)
 
 class LogoutUsuario(APIView):
     # El usuario ha cerrar sesion dede estar autenticado
@@ -87,3 +110,26 @@ class LogoutUsuario(APIView):
         response.delete_cookie('access') # Eliminar la cookie con la autorizacion
         return response
 
+
+# Envio correo de confirmacion de registros y actualizacion de datos
+
+
+def envio_correo_registro(self, request, asunto, correo, ruta_template):
+    # Renderizar el html
+    contexto = {
+        'first_name':request.data['first_name'].upper()
+    }
+
+    html = render_to_string(ruta_template, contexto)
+    # Renderizar el texto
+    texto = strip_tags(html)
+    # Enviar el correo
+    correo = EmailMultiAlternatives(
+        subject=asunto,
+        body=texto,
+        from_email='juanperez@gmail.com',
+        to=[correo]
+    )
+    correo.attach_alternative(html, 'text/html')
+    correo.send()
+    return Response([],status=state.HTTP_200_OK)

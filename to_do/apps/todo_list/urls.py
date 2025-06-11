@@ -9,6 +9,6 @@ urlpatterns = [
     path('token',TokenObtainPairView.as_view(), name='token'),
     path('refresh',TokenRefreshView.as_view(), name='refresh'),
     # Rutas para tareas
-    path('<slug:pk>', ApiTodo.as_view(), name='tareas'), # Eliminar o actuallizar la tarea
-    path('actualizar/<slug:pk>',TodoUpdate.as_view(), name='actualizar_tarea') # Actualziar la tarea
+    path('<uuid:pk>', ApiTodo.as_view(), name='tareas'), # Eliminar o actuallizar la tarea
+    path('actualizar/<uuid:pk>',TodoUpdate.as_view(), name='actualizar_tarea') # Actualziar la tarea
 ]

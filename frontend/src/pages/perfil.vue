@@ -30,11 +30,10 @@
                 <hr>
                 <section class="row">
                     <article class="col">
-                        <Acordion :mensaje_btn="'Cambiar correo electronico'" msg_label='Correo electronico' dato='email' icono='fa-solid fa-envelope' tipo_input='email' valor_actual="jplesmes19@gmail.com" mostrar_actual/>
+                        <Acordion :mensaje_btn="'Cambiar correo electronico'" msg_label='Correo electronico' dato='email' icono='fa-solid fa-envelope' tipo_input='email' :valor_actual="dataUsuario.email" mostrar_actual/>
                     </article>
-                    
                     <article class="col">
-                        <Acordion :mensaje_btn="'Cambiar la contraseña'" msg_label='Contraseña' dato='contraseña' icono='fa-solid fa-lock' tipo_input='password' confirmar_input/>
+                        <Acordion :mensaje_btn="'Cambiar la contraseña'" msg_label='Contraseña' dato='contraseña' icono='fa-solid fa-lock' tipo_input='password' confirmar_input :funcion="cambiar_contrasena"/>
                     </article>
                 </section>
             </article>
@@ -48,8 +47,10 @@ import {onMounted,ref} from 'vue';
 import { useUserStore } from '../stores/userStore'
 import { Usuario } from '../interfaces/interfaces';
 import Acordion from '../components/general_components/PropsCorfimacion.vue';
+import {useAlertStore} from '../stores/alertStore'
 
 const userStore = useUserStore(); // API context
+const alertas = useAlertStore(); // Uso global de alertas
 
 const dataUsuario = ref<Usuario>({
     username: "",
@@ -70,6 +71,21 @@ onMounted(async() => {
         dataUsuario.value.email = response.usuario.email;
     }
 })
+
+// Funcion para cambiar la contraseña
+const cambiar_contrasena = async() => {
+    
+    let response = await userStore.apiUsuarios("http://localhost:8000/api/users/actualizar-perfil", "PATCH",{
+        info_basica:false, // Solo va a cambiar clave
+        basico:dataUsuario.value,
+        clave:true,
+    });
+}
+
+// Funcion para actualizar el correo electronico
+const cambiar_correo = () => {
+
+}
 
 
 </script>
