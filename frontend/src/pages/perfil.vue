@@ -23,6 +23,9 @@
                             <label for="last_name" class="label-form mb-2">Segundo nombre:</label>
                             <input type="text" name="last_name" id="last_name" class="form-control" v-model="dataUsuario.last_name" required>
                         </article>
+                        <article class="justify-self-end">
+                            <Boton msg="Actualizar datos" color="dark" icono="fa-solid fa-save" @funcion_btn="datos_basicos"/>
+                        </article>
                     </section>
                 </form>
                 <!-- datos de email y contraseña -->
@@ -30,10 +33,38 @@
                 <hr>
                 <section class="row">
                     <article class="col">
-                        <Acordion :mensaje_btn="'Cambiar correo electronico'" msg_label='Correo electronico' dato='email' icono='fa-solid fa-envelope' tipo_input='email' :valor_actual="dataUsuario.email" mostrar_actual/>
+                        <!-- Datos del correo electronico -->
+                        <section>
+                            <article class="grid grid-cols-2 gap-4">
+                                <label for="email" class="form-label col-span-2">Datos del email </label>
+                                <article>                                   
+                                    <label for="email" class="form-label">Email actual:</label>
+                                    <input type="email" name="email" id="" class="form-control" :value="correo_actual" disabled>
+                                    <input type="email" name="email" id="email" class="form-control mt-2" v-model="dataUsuario.email" placeholder="Email nuevo">
+                                </article>
+                                <article class="justify-self-center">
+                                    <Boton msg="Cambiar correo" color="dark" icono="fa-solid fa-envelope" @funcion_btn="cambiar_correo"/>
+                                </article>
+                            </article>
+                        </section>
                     </article>
                     <article class="col">
-                        <Acordion :mensaje_btn="'Cambiar la contraseña'" msg_label='Contraseña' dato='contraseña' icono='fa-solid fa-lock' tipo_input='password' confirmar_input :funcion="cambiar_contrasena"/>
+                        <!-- Datos de contraseña -->
+                        <section>
+                            <article class="grid grid-cols-2 gap-4">
+                                <label for="password" class="form-label col-span-2">Contraseña</label>
+                                <article>
+                                    <label for="password" class="form-label">Contraseña actual:</label>
+                                    <input :type="tipo_input" name="password" id="password1" class="form-control" placeholder="Nueva contraseña">
+                                    <input :type="tipo_input" name="password" id="password" class="form-control mt-2" v-model="dataUsuario.password" placeholder="Confirme la contraseña nueva">
+                                </article>
+                                <article class="justify-self-center">
+                                    <Boton msg="Cambiar contraseña" color="dark" icono="fa-solid fa-key" @funcion_btn="cambiar_contrasena"/>
+                                    <!-- Mostrar la contraseña-->
+                                    <Boton msg="Mostrar contraseña" color="dark" :icono="tipo_input === 'password' ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'" @funcion_btn="mostrar_contrasena"/>
+                                </article>
+                            </article>
+                        </section>
                     </article>
                 </section>
             </article>
@@ -44,13 +75,15 @@
 <script setup lang="ts">
 import Boton from '../components/general_components/Boton.vue';
 import {onMounted,ref} from 'vue';
-import { useUserStore } from '../stores/userStore'
+import { useUserStore } from '../stores/userStore';
 import { Usuario } from '../interfaces/interfaces';
-import Acordion from '../components/general_components/PropsCorfimacion.vue';
-import {useAlertStore} from '../stores/alertStore'
+import {useAlertStore} from '../stores/alertStore';
+
 
 const userStore = useUserStore(); // API context
 const alertas = useAlertStore(); // Uso global de alertas
+const correo_actual =ref<String>(""); // Mantener el correo actual y no mezclado v-model de 'dataUsuario.email'
+const tipo_input = ref<String>("password"); // Variable encargada de cambiar el tipo de input en la contraseña para poderla validar.
 
 const dataUsuario = ref<Usuario>({
     username: "",
@@ -69,6 +102,7 @@ onMounted(async() => {
         dataUsuario.value.first_name = response.usuario.first_name;
         dataUsuario.value.last_name = response.usuario.last_name;
         dataUsuario.value.email = response.usuario.email;
+        correo_actual.value = response.usuario.email; // Correo actual
     }
 })
 
@@ -84,8 +118,19 @@ const cambiar_contrasena = async() => {
 
 // Funcion para actualizar el correo electronico
 const cambiar_correo = () => {
-
+    alert("cambiando coreo");
 }
+
+// Funcion para cambiar los datos basicos del usuario
+const datos_basicos = async() => {
+    await alert("Cambiando los datos basicos de usuario");
+}
+
+// Funcion para mostrar la contreseña
+const mostrar_contrasena = () => {
+    return tipo_input.value === "text" ? tipo_input.value = "password" : tipo_input.value = "text";
+}
+
 
 
 </script>
