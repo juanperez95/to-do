@@ -54,7 +54,7 @@
                             <article class="grid grid-cols-2 gap-4">
                                 <label for="password" class="form-label col-span-2">Contraseña</label>
                                 <article>
-                                    <label for="password" class="form-label">Contraseña actual:</label>
+                                    <label for="password" class="form-label">Actualizar contraseña:</label>
                                     <input :type="tipo_input" name="password" id="password1" class="form-control" placeholder="Nueva contraseña">
                                     <input :type="tipo_input" name="password" id="password" class="form-control mt-2" v-model="dataUsuario.password" placeholder="Confirme la contraseña nueva">
                                 </article>
@@ -74,9 +74,9 @@
 
 <script setup lang="ts">
 import Boton from '../components/general_components/Boton.vue';
-import {onMounted,ref} from 'vue';
+import {onMounted,ref,reactive} from 'vue';
 import { useUserStore } from '../stores/userStore';
-import { Usuario } from '../interfaces/interfaces';
+import { Usuario, Perfil } from '../interfaces/interfaces';
 import {useAlertStore} from '../stores/alertStore';
 
 
@@ -85,6 +85,7 @@ const alertas = useAlertStore(); // Uso global de alertas
 const correo_actual =ref<String>(""); // Mantener el correo actual y no mezclado v-model de 'dataUsuario.email'
 const tipo_input = ref<String>("password"); // Variable encargada de cambiar el tipo de input en la contraseña para poderla validar.
 
+// Datos de usuario para formulario
 const dataUsuario = ref<Usuario>({
     username: "",
     first_name: "",
@@ -92,6 +93,15 @@ const dataUsuario = ref<Usuario>({
     email: "",
     password: ""
 });
+
+// Datos para actualizar el perfil
+const datos_perfil = reactive<Perfil>({
+    info_basica:false,
+    basico:dataUsuario.value,
+    clave:false,
+    correo:false
+});
+
 
 // Al redenderizar el componente se realiza la siguiente peticion para traer la informacion del usuario logueado
 onMounted(async() => {
@@ -107,23 +117,41 @@ onMounted(async() => {
 })
 
 // Funcion para cambiar la contraseña
-const cambiar_contrasena = async() => {
-    
-    let response = await userStore.apiUsuarios("http://localhost:8000/api/users/actualizar-perfil", "PATCH",{
-        info_basica:false, // Solo va a cambiar clave
-        basico:dataUsuario.value,
-        clave:true,
-    });
+const cambiar_contrasena = async() => {   
+    datos_perfil.clave = true; // Cambiar contraseña
+    datos_perfil.correo = false; 
+    datos_perfil.info_basica = false; 
+    let response = await userStore.apiUsuarios("http://localhost:8000/api/users/actualizar-perfil", "PATCH",datos_perfil);
+
+    if(response['update-password']){
+        alertas.mostrarAlerta("Éxito", "Contraseña actualizada con éxito", "success", "#0c64b7",true);
+    }else{
+        alertas.mostrarAlerta("Error", "No se ha podido actualizar la contraseña", "error", "#0c64b7",true);
+    }
 }
 
 // Funcion para actualizar el correo electronico
-const cambiar_correo = () => {
-    alert("cambiando coreo");
+const cambiar_correo = async() => {
+    datos_perfil.clave = false; 
+    datos_perfil.correo = true; // Cambiar correo
+    datos_perfil.correo_antiguo = correo_actual.value; // Guardar correo antiguo
+    datos_perfil.info_basica = false; 
+    let response = await userStore.apiUsuarios("http://localhost:8000/api/users/actualizar-perfil", "PATCH",datos_perfil);
+    console.log(response);
 }
 
 // Funcion para cambiar los datos basicos del usuario
 const datos_basicos = async() => {
-    await alert("Cambiando los datos basicos de usuario");
+    datos_perfil.clave = false; 
+    datos_perfil.correo = false; 
+    datos_perfil.info_basica = true; // Cambiar los datos basicos
+    let response = await userStore.apiUsuarios("http://localhost:8000/api/users/actualizar-perfil", "PATCH",datos_perfil);
+
+    if(response['update-basico']){
+        alertas.mostrarAlerta("Éxito", "Datos actualizados con éxito", "success", "#0c64b7",true)
+    }else{
+        alertas.mostrarAlerta("Error", "No se ha podido actualizar los datos", "error", "#0c64b7",true)
+    }
 }
 
 // Funcion para mostrar la contreseña

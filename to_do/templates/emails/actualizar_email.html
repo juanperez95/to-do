@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- Contenido del correo -->
+    <section style="display: flex; justify-content: center; align-items: center; background-color: #6b46c1; padding: 8px; width: 100%;">
+        <article style="color: white; font-size: 24px; text-align: center; font-weight: bold;">
+            <p>TO-DO</p>
+        </article>
+    </section>
+    <section style="margin: 40px; display: flex; flex-direction: column; gap: 20px;">
+        <article>
+            <h2 style="font-size: 24px; color: #9f7aea; font-weight: bold;">¡Hola {{ first_name }}, te dice TO-DO!</h2>
+        </article>
+        <article style="font-size: 18px;">
+            <h3>¡Bienvenido a TO-DO, tienes el poder de llevar el control de tu vida!</h3>
+        </article>
+        <article style="font-size: 18px;">
+            <h3>Para actualizar tu correo electronico, haz click en el siguiente enlace:</h3>
+            <a href="{{ link }}" style="color: #9f7aea; text-decoration: none;">Haz click aqui para actualizar tu correo electronico</a>
+        </article>
+    </section>
+</body>
+</html>

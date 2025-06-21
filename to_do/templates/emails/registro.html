@@ -1,24 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro</title>
-</head>
 <body>
-    <section>
-        <article>
-            <h2 class="titulo">¡Hola {{ first_name }}, te dice TO-DO!</h2>
-        </article>
-        <article>
-          <h3>¡Bienvenido a TO-DO, tienes el poder de llevar el control de tu vida!</h3>
-        </article>
-    </section>
-    <!-- Llevar los estilos -->
-    <style>
-      .titulo{
-        color:red;
-      }
-    </style>
+  <section style="display: flex; justify-content: center; align-items: center; background-color: #6b46c1; padding: 8px; width: 100%;">
+    <article style="color: white; font-size: 24px; text-align: center; font-weight: bold;">
+      <p>TO-DO</p>
+    </article>
+  </section>
+  <section style="margin: 40px; display: flex; flex-direction: column; gap: 20px;">
+      <article>
+          <h2 style="font-size: 24px; color: #9f7aea; font-weight: bold;">¡Hola {{ first_name }}, te dice TO-DO!</h2>
+      </article>
+      <article style="font-size: 18px;">
+        <h3>¡Bienvenido a TO-DO, tienes el poder de llevar el control de tu vida!</h3>
+      </article>
+  </section>
 </body>
 </html>

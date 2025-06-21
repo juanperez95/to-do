@@ -25,3 +25,12 @@ export type Todo = {
     // Especificar si la tarea se completo
     cumplido?: Boolean,
 }
+
+// Tipo para definir los datos de actualizacion del perfil de usuario
+export type Perfil = {
+    info_basica?: Boolean, // Si se va a actualizar la informacion basica
+    basico?: Usuario, // Datos basicos del usuario
+    clave?: Boolean, // Si se va a actualizar la contraseña
+    correo?: Boolean, // Si se va a actualizar el correo electronico
+    correo_antiguo?: String, // Correo antiguo
+}
