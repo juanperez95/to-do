@@ -120,7 +120,7 @@ class Usuarios(APIView):
             # Datos para renderizar html de correo
             contexto = {
                 'first_name':request.data['basico']['first_name'],
-                'link':request.build_absolute_uri(f'/api/users/actualizar-perfil/correo?token={clave_aleatoria}&validate=1&email={request.data['basico']['email']}')
+                'link':request.build_absolute_uri(f'/api/users/actualizar-perfil/correo?token={clave_aleatoria}&validate={request.user.id}&email={request.data['basico']['email']}')
             }
 
             # Enviar correo de manera asincrona para email
@@ -146,16 +146,20 @@ class VerificacionLink(TemplateView):
     template_name = 'verification/verificacion_correo.html'
 
     def get(self, request):
-        # Validar si el token es valido
+        # Recoger datos metodo GET
         token = request.GET.get('token')
         validacion = request.GET.get('validate')
         correo = request.GET.get('email')
 
-        credencial_validacion = Verificacion_correo.objects.get(token=token)
-        if credencial_validacion.validar_token(correo, token, validacion) is not True:
-            return super().get(request)
-            
-        return HttpResponse('Error en el token')
+        # Obtener token de la base de datos y validar si es valido
+        try:
+            credencial_validacion = Verificacion_correo.objects.get(token=token, email=correo)
+            print(credencial_validacion)
+            if credencial_validacion.validar_token(correo, token, int(validacion)):
+                return super().get(request) # Si es valido el token
+        except Verificacion_correo.DoesNotExist:
+            pass
+        return HttpResponse('¡El token no es valido, vuelva a generar otro!')
 
 
 # Envio correo de confirmacion de registros y actualizacion de datos

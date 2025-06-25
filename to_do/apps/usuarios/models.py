@@ -16,8 +16,12 @@ class Verificacion_correo(models.Model):
     def __str__(self):
         return self.email
 
-    # Funcion para cada modelo de validar si el token corresponde al email y si es valido
+    # Funcion para cada modelo de validar si el token corresponde al email y si es valido para la actulizacion del correo
     def validar_token(self, email, token, id_usuario):
-        if self.email == email and self.token == token and self.validez and self.usuario.id == id_usuario:
+        if self.email == email and self.token == token and self.validez is True and self.usuario.id == id_usuario:
+            usuario = User.objects.get(id=id_usuario)
+            usuario.email = self.email # Actualizar el email
+            usuario.save()
+            self.delete() # Borrar el registro de base de datos ya que es valido el token
             return True
         return False

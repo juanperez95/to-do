@@ -137,7 +137,12 @@ const cambiar_correo = async() => {
     datos_perfil.correo_antiguo = correo_actual.value; // Guardar correo antiguo
     datos_perfil.info_basica = false; 
     let response = await userStore.apiUsuarios("http://localhost:8000/api/users/actualizar-perfil", "PATCH",datos_perfil);
-    console.log(response);
+    // Validar que la peticion es exitosa
+    if(response['update-correo']){
+        alertas.mostrarAlerta("Enviado", "Se ha enviado el correo de confirmacion", "success", "#0c64b7",true);
+    }else{
+        alertas.mostrarAlerta("Error", "No se ha podido enviar el correo de confirmacion", "error", "#0c64b7",true);
+    }
 }
 
 // Funcion para cambiar los datos basicos del usuario
