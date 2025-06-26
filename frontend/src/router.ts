@@ -10,7 +10,7 @@ const routes = [
     { path: "/", component: Todos },
     { path: "/crear-usuario", component: Main },
     { path: "/actualizar-todo/:id",component:ActualizarTodo , meta: { requiresAuth: true } }, // Ruta protegida debe estar autenticado
-    { path: "/perfil", component: Perfil },
+    { path: "/perfil", component: Perfil, meta:{ requiresAuth:true } },
 ];
 
 const router = createRouter({

@@ -121,12 +121,17 @@ const cambiar_contrasena = async() => {
     datos_perfil.clave = true; // Cambiar contraseña
     datos_perfil.correo = false; 
     datos_perfil.info_basica = false; 
-    let response = await userStore.apiUsuarios("http://localhost:8000/api/users/actualizar-perfil", "PATCH",datos_perfil);
-
-    if(response['update-password']){
-        alertas.mostrarAlerta("Éxito", "Contraseña actualizada con éxito", "success", "#0c64b7",true);
+    // Validar que las contraseñas coinciden
+    if(document.getElementById("password").value === document.getElementById("password1").value){
+        let response = await userStore.apiUsuarios("http://localhost:8000/api/users/actualizar-perfil", "PATCH",datos_perfil);
+    
+        if(response['update-password']){
+            alertas.mostrarAlerta("Éxito", "Contraseña actualizada con éxito", "success", "#0c64b7",true);
+        }else{
+            alertas.mostrarAlerta("Error", "No se ha podido actualizar la contraseña", "error", "#0c64b7",true);
+        }
     }else{
-        alertas.mostrarAlerta("Error", "No se ha podido actualizar la contraseña", "error", "#0c64b7",true);
+        alertas.mostrarAlerta("Error", "Las contraseñas no coinciden", "error", "#0c64b7",true);
     }
 }
 

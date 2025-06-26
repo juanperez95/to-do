@@ -54,6 +54,15 @@ class LoginUsuario(APIView):
                 secure=True,
                 samesite='Strict'
             )
+            # Cookie con el refresh token
+            response.set_cookie(
+                key='refresh',
+                value=str(access),
+                max_age=3600,
+                httponly=True,
+                secure=True,
+                samesite='Strict'
+            )
             # Retornar el json
             return response
 
@@ -139,6 +148,7 @@ class LogoutUsuario(APIView):
         logout(request)
         response = Response({'logout':True},status=state.HTTP_200_OK)
         response.delete_cookie('access') # Eliminar la cookie con la autorizacion
+        response.delete_cookie('refresh') # Eliminar la cookie con la autorizacion
         return response
 
 # Vista para terminar de validar la actualizacion de correo electronico
